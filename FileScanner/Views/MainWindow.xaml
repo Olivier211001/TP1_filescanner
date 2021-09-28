@@ -15,14 +15,35 @@
         <ToolBar DockPanel.Dock="Top">
             <Button Content="Scan" Command="{Binding ScanFolderCommand}" CommandParameter="{Binding SelectedFolder}" />
 
-
+            
         </ToolBar>
         <StatusBar DockPanel.Dock="Bottom">
             <TextBlock Text="Selected folder : "/>
             <TextBlock Text="{Binding SelectedFolder}"/>
+           
         </StatusBar>
         <Grid>
-            <ListView ItemsSource="{Binding FolderItems}"/>
+
+
+            <ListView  ItemsSource="{Binding FolderItems}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Width="35">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image Source="{Binding Image}" Height="30"></Image>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Name}" Width="700"/>
+
+                    </GridView>
+                </ListView.View>
+            </ListView>
+
+
+
+
         </Grid>
     </DockPanel>
 </Window>

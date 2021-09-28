@@ -1,0 +1,8 @@
+Page de .NET qui explique les tâches asynchrones :
+
+https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/async/
+
+
+Page Stackoverflow sur les Try/Catch avec les fonctions async :
+
+https://stackoverflow.com/questions/5383310/catch-an-exception-thrown-by-an-async-void-method

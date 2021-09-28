@@ -1,4 +1,5 @@
 ﻿using FileScanner.Commands;
+using FileScanner.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,19 +14,22 @@ namespace FileScanner.ViewModels
     public class MainViewModel : BaseViewModel
     {
         private string selectedFolder;
-        private ObservableCollection<string> folderItems = new ObservableCollection<string>();
-         
+        private ObservableCollection<ContentFolder> folderItems = new ObservableCollection<ContentFolder>();
+        private ContentFolder currentContent;
+
         public DelegateCommand<string> OpenFolderCommand { get; private set; }
         public DelegateCommand<string> ScanFolderCommand { get; private set; }
 
-        public ObservableCollection<string> FolderItems { 
-            get => folderItems;
+        public ObservableCollection<ContentFolder>  FolderItems { 
+            get =>  folderItems;
             set 
             { 
                 folderItems = value;
                 OnPropertyChanged();
             }
         }
+
+       
 
         public string SelectedFolder
         {
@@ -60,22 +64,30 @@ namespace FileScanner.ViewModels
             }
         }
 
-        private void ScanFolder(string dir)
+        private async void ScanFolder(string dir)
         {
-            FolderItems = new ObservableCollection<string>(GetDirs(dir));
-            
-            foreach (var item in Directory.EnumerateFiles(dir, "*"))
-            {
-                FolderItems.Add(item);
-            }
+
+            await GetDirs(dir); 
         }
 
-        IEnumerable<string> GetDirs(string dir)
-        {            
-            foreach (var d in Directory.EnumerateDirectories(dir, "*"))
+        private async Task GetDirs(string dir)
+        {
+            try
             {
-                yield return d;
+                foreach (var d in Directory.EnumerateDirectories(dir, "*"))
+                {
+                    currentContent = new ContentFolder(d, "../ViewModels/folder.jpg");
+                    folderItems.Add(currentContent);
+                    foreach (var f in Directory.EnumerateFiles(dir, "*"))
+                    {
+                        currentContent = new ContentFolder(f, "../ViewModels/fichier.png");
+                        folderItems.Add(currentContent);
+                    }
+                    await GetDirs(d);
+                }
             }
+            catch (Exception e)
+            { }        
         }
 
         ///TODO : Tester avec un dossier avec beaucoup de fichier
